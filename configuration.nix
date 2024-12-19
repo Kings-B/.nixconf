@@ -78,6 +78,7 @@
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
+    jack.enable = true;
     pulse.enable = true;
   };
 
@@ -98,7 +99,7 @@
     vscodium
     git
     github-desktop
-    firefox
+    floorp
     # super-productivity
     neofetch
     htop
@@ -106,6 +107,8 @@
     wofi
     gnome-keyring
     libsecret
+    vlc
+    pavucontrol
   ];
 
   # List of custom command aliasses
