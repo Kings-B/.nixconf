@@ -108,6 +108,13 @@
     libsecret
   ];
 
+  # List of custom command aliasses
+  environment.shellAliases = {
+    nix-conf = "cd /etc/nixos/";
+    nano-nix = "sudo nano /etc/nixos/configuration.nix";
+    codium-nix = "codium /etc/nixos/configuration.nix";
+  };
+
   # Enable Hyprland
   programs.hyprland.enable = true;
 
