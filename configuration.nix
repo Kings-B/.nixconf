@@ -108,22 +108,22 @@
     kitty
     vscodium
     git
-    floorp
+    floorp # Browser because the Zen browser is not on nix yet
     # super-productivity
     neofetch
-    htop
+    htop # System monitoring services
     obsidian
-    wofi
-    gnome-keyring
-    libsecret
-    vlc
-    pavucontrol
-    libsForQt5.qt5ct
-    xfce.thunar
-    udisks2
-    udiskie
-    gvfs
-    neovim
+    wofi # Little mac like bar thingy for opening apps
+    # gnome-keyring # Needed it for github desktop
+    # libsecret # Needed it for gnome-keyring
+    vlc # Video Player
+    pavucontrol # Audio?
+    libsForQt5.qt5ct # System Dark Mode
+    xfce.thunar # File manager
+    udisks2 # Something to do with flashdrives
+    udiskie # Also has something to do with flashdrives
+    gvfs # Another flashdrive thing
+    neovim # I heard that it was good, used it, I want to kill myself.
   ];
 
   # List of custom command aliasses
@@ -145,8 +145,8 @@
   programs.hyprland.enable = true;
 
   # Enable gnome keyring servie. This is required to be able to sign into github desktop and probably other services.
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.sddm.enableGnomeKeyring = true;
+  # services.gnome.gnome-keyring.enable = true;
+  # security.pam.services.sddm.enableGnomeKeyring = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
