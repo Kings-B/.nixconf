@@ -6,7 +6,7 @@
       ./hardware-configuration.nix
     ];
 
-  # Bootloader.
+  # GRUB Bootloader.
   boot = {
     tmp.cleanOnBoot = true;
     loader = {
@@ -21,11 +21,8 @@
       timeout = 300;
     };
   };
-  # boot.loader.grub.enable = true;
-  # boot.loader.grub.devices = [ "nodev" ]; # Change to proper boot directory path
-  # boot.loader.grub.useOSProber = true;
-  # boot.loader.efi.canTouchEfiVariables = true;
 
+  # Enable usage of the SDDM display manger 
   services.displayManager = {
     sddm.wayland.enable = true;
     sddm.enable = true;
@@ -63,7 +60,20 @@
      open = false; # Propietary Nvidia Drivers (For open source drivers change to true)
   };   
 
-  hardware.graphics.enable = true; # Enable opengl?
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      vulkan-loader
+    ];
+    extraPackages32 = with pkgs.pkgsi686Linux; [
+      vulkan-loader
+      mesa
+    ];
+  };
+
+  programs.steam = {
+    enable = true;
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -98,24 +108,37 @@
     kitty
     vscodium
     git
-    github-desktop
     floorp
     # super-productivity
     neofetch
     htop
-    #obsidian
+    obsidian
     wofi
     gnome-keyring
     libsecret
     vlc
     pavucontrol
+    libsForQt5.qt5ct
+    xfce.thunar
+    udisks2
+    udiskie
+    gvfs
+    neovim
   ];
 
   # List of custom command aliasses
   environment.shellAliases = {
     nix-conf = "cd /etc/nixos/";
-    nano-nix = "sudo nano /etc/nixos/configuration.nix";
+    nvim-nix = "sudo nvim /etc/nixos/configuration.nix";
     codium-nix = "codium /etc/nixos/configuration.nix";
+  };
+
+  services.udisks2.enable = true;
+
+  environment.variables = {
+    GTK_THEME = "Adwaita:dark";
+    QT_QPA_PLATFORMTHEME = "qt5ct";
+    QT_STYLE_OVERRIDE = "Fusion";
   };
 
   # Enable Hyprland
@@ -134,3 +157,5 @@
   system.stateVersion = "24.11"; # Did you read the comment?
 
 }
+
+# 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
