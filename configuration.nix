@@ -33,6 +33,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  #networking.bridges.br0.interfaces = [ "enp5s0" ];
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -89,41 +90,54 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     jack.enable = true;
-    pulse.enable = true;
+    pulse.enable = false;
+    wireplumber.enable = true;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.poppy = {
     isNormalUser = true;
     description = "Poppy Field";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm"];
     packages = with pkgs; [];
   };
+
+  # Configuring Virtualization
+  virtualisation.libvirtd = {
+    enable = true;
+  };
+  programs.virt-manager.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile: nix search wget
   environment.systemPackages = with pkgs; [
-    kitty
-    vscodium
+    kitty # terminal environment
+    vscodium # GUI text editor
     git
     floorp # Browser because the Zen browser is not on nix yet
     # super-productivity
-    neofetch
+    neofetch # System information
     htop # System monitoring services
-    obsidian
+    obsidian # Node based notes and journals
     wofi # Little mac like bar thingy for opening apps
     # gnome-keyring # Needed it for github desktop
     # libsecret # Needed it for gnome-keyring
-    vlc # Video Player
-    pavucontrol # Audio?
-    libsForQt5.qt5ct # System Dark Mode
-    xfce.thunar # File manager
+    celluloid # Video Player
+    qpwgraph # Audio control panel
+    libsForQt5.qt5ct # System theme controls
+    xfce.thunar # File Manager
     udisks2 # Something to do with flashdrives
     udiskie # Also has something to do with flashdrives
     gvfs # Another flashdrive thing
-    neovim # I heard that it was good, used it, I want to kill myself.
+    neovim # "Minimalistic" text editor
+    obs-studio # Recording and streaming software
+    libva-utils # Hardware Acceleration
+    davinci-resolve # Video Editor
+    onlyoffice-desktopeditors # Office Suit
+    discord
+    flameshot # Screenshot Software
   ];
 
   # List of custom command aliasses
