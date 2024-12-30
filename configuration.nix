@@ -4,9 +4,9 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./virtual-machine.nix
-
-      <home-manager/nixos>
+      ./cc/virtual-machine.nix
+      ./cc/aliases.nix
+      ./cc/home-manager.nix
     ];
 
   # # GRUB Bootloader.
@@ -103,20 +103,17 @@
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm"];
     packages = with pkgs; [];
   };
-  home-manager.useGlobalPkgs = true; 
 
-  # # Allow unfree packages
+    # # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # # List packages installed in system profile: nix search wget
   environment.systemPackages = with pkgs; [
     kitty
-    vscodium
     git
     floorp
     neofetch
     htop
-    obsidian
     wofi
     gnome-keyring # Needed it for github desktop
     libsecret # Needed it for gnome-keyring
@@ -127,47 +124,17 @@
     udiskie
     gvfs
     neovim
-    obs-studio
     libva-utils
-    davinci-resolve
     onlyoffice-desktopeditors
-    discord
     flameshot
     pavucontrol
+    obsidian
+    obs-studio
+    davinci-resolve
+    discord
+    wl-clipboard
+    gh
   ];
-
-  # # List of custom command aliasses
-  environment.shellAliases = {
-    wofi-conf = "cd ./.config/wofi/";
-    hyprland-conf = "cd ./.config/hypr/";
-    nix-conf = "cd /etc/nixos/";
-    nvim-nix = "sudo nvim /etc/nixos/configuration.nix";
-    codium-nix = "codium /etc/nixos/configuration.nix";
-  };
-
-  home-manager.users.poppy = { pkgs, ... }: {
-    home.packages = [  
-      
-    ];
-
-    programs.git = {
-      enable = true;
-      userEmail = "kvbayard@gmail.com";
-      userName = "Kings-B";
-
-      extraConfig = {
-	credential.helper = "store";
-      };
-    };
-    
-    services.gpg-agent = {
-      enable = true;
-      defaultCacheTtl = 1800;
-      enableSshSupport = true;
-    };
-
-    home.stateVersion = "24.11";
-  };
 
   services.udisks2.enable = true;
 
