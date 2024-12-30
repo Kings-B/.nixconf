@@ -4,9 +4,12 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./virtual-machine.nix
+
+      <home-manager/nixos>
     ];
 
-  # GRUB Bootloader.
+  # # GRUB Bootloader.
   boot = {
     tmp.cleanOnBoot = true;
     loader = {
@@ -22,7 +25,7 @@
     };
   };
 
-  # Enable usage of the SDDM display manger 
+  # # Enable usage of the SDDM display manger 
   services.displayManager = {
     sddm.wayland.enable = true;
     sddm.enable = true;
@@ -31,14 +34,13 @@
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Enable networking
+  # # Enable networking
   networking.networkmanager.enable = true;
-  #networking.bridges.br0.interfaces = [ "enp5s0" ];
 
-  # Set your time zone.
+  # # Set your time zone.
   time.timeZone = "America/New_York";
 
-  # Select internationalisation properties.
+  # # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -53,7 +55,7 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Nvidia Drivers
+  # # Nvidia Drivers
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
@@ -61,6 +63,7 @@
      open = false; # Propietary Nvidia Drivers (For open source drivers change to true)
   };   
 
+  # # Setting up steam graphics
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -72,17 +75,16 @@
     ];
   };
 
-  programs.steam = {
-    enable = true;
-  };
+  # # Installing steam
+  programs.steam.enable = true;
 
-  # Configure keymap in X11
+  # # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
 
-  # Enable sound with pipewire.
+  # # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -94,57 +96,77 @@
     wireplumber.enable = true;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.poppy = {
     isNormalUser = true;
     description = "Poppy Field";
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm"];
     packages = with pkgs; [];
   };
+  home-manager.useGlobalPkgs = true; 
 
-  # Configuring Virtualization
-  virtualisation.libvirtd = {
-    enable = true;
-  };
-  programs.virt-manager.enable = true;
-
-  # Allow unfree packages
+  # # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile: nix search wget
+  # # List packages installed in system profile: nix search wget
   environment.systemPackages = with pkgs; [
-    kitty # terminal environment
-    vscodium # GUI text editor
+    kitty
+    vscodium
     git
-    floorp # Browser because the Zen browser is not on nix yet
-    # super-productivity
-    neofetch # System information
-    htop # System monitoring services
-    obsidian # Node based notes and journals
-    wofi # Little mac like bar thingy for opening apps
-    # gnome-keyring # Needed it for github desktop
-    # libsecret # Needed it for gnome-keyring
-    celluloid # Video Player
-    qpwgraph # Audio control panel
-    libsForQt5.qt5ct # System theme controls
-    xfce.thunar # File Manager
-    udisks2 # Something to do with flashdrives
-    udiskie # Also has something to do with flashdrives
-    gvfs # Another flashdrive thing
-    neovim # "Minimalistic" text editor
-    obs-studio # Recording and streaming software
-    libva-utils # Hardware Acceleration
-    davinci-resolve # Video Editor
-    onlyoffice-desktopeditors # Office Suit
+    floorp
+    neofetch
+    htop
+    obsidian
+    wofi
+    gnome-keyring # Needed it for github desktop
+    libsecret # Needed it for gnome-keyring
+    celluloid
+    libsForQt5.qt5ct
+    xfce.thunar
+    udisks2
+    udiskie
+    gvfs
+    neovim
+    obs-studio
+    libva-utils
+    davinci-resolve
+    onlyoffice-desktopeditors
     discord
-    flameshot # Screenshot Software
+    flameshot
+    pavucontrol
   ];
 
-  # List of custom command aliasses
+  # # List of custom command aliasses
   environment.shellAliases = {
+    wofi-conf = "cd ./.config/wofi/";
+    hyprland-conf = "cd ./.config/hypr/";
     nix-conf = "cd /etc/nixos/";
     nvim-nix = "sudo nvim /etc/nixos/configuration.nix";
     codium-nix = "codium /etc/nixos/configuration.nix";
+  };
+
+  home-manager.users.poppy = { pkgs, ... }: {
+    home.packages = [  
+      
+    ];
+
+    programs.git = {
+      enable = true;
+      userEmail = "kvbayard@gmail.com";
+      userName = "Kings-B";
+
+      extraConfig = {
+	credential.helper = "store";
+      };
+    };
+    
+    services.gpg-agent = {
+      enable = true;
+      defaultCacheTtl = 1800;
+      enableSshSupport = true;
+    };
+
+    home.stateVersion = "24.11";
   };
 
   services.udisks2.enable = true;
@@ -155,12 +177,12 @@
     QT_STYLE_OVERRIDE = "Fusion";
   };
 
-  # Enable Hyprland
+  # # Enable Hyprland
   programs.hyprland.enable = true;
 
-  # Enable gnome keyring servie. This is required to be able to sign into github desktop and probably other services.
-  # services.gnome.gnome-keyring.enable = true;
-  # security.pam.services.sddm.enableGnomeKeyring = true;
+  # # Enable gnome keyring servie. This is required to be able to sign into github desktop and probably other services.
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.sddm.enableGnomeKeyring = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
