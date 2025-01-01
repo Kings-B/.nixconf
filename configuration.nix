@@ -29,6 +29,7 @@
   services.displayManager = {
     sddm.wayland.enable = true;
     sddm.enable = true;
+    sddm.theme = "sugar-dark";
   };
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -61,7 +62,7 @@
   hardware.nvidia = {
      modesetting.enable = true;
      open = false; # Propietary Nvidia Drivers (For open source drivers change to true)
-  };   
+  };  
 
   # # Setting up steam graphics
   hardware.graphics = {
@@ -74,9 +75,6 @@
       mesa
     ];
   };
-
-  # # Installing steam
-  programs.steam.enable = true;
 
   # # Configure keymap in X11
   services.xserver.xkb = {
@@ -109,31 +107,50 @@
 
   # # List packages installed in system profile: nix search wget
   environment.systemPackages = with pkgs; [
-    kitty
-    git
-    floorp
-    neofetch
     htop
-    wofi
-    gnome-keyring # Needed it for github desktop
-    libsecret # Needed it for gnome-keyring
-    celluloid
+    gnome-keyring
+    libsecret
     libsForQt5.qt5ct
     xfce.thunar
     udisks2
     udiskie
     gvfs
-    neovim
     libva-utils
     onlyoffice-desktopeditors
+    wlr-randr
+    gcc
+    gnumake
+    libsForQt5.qt5.qtgraphicaleffects
+
+    # -------------------- #
+
+    you-get
+    steam
+    neofetch
     flameshot
     pavucontrol
+    gh
+    wl-clipboard
+    ripgrep
+    nodejs
+    unzip
+    wget
+    fd
     obsidian
     obs-studio
     davinci-resolve
     discord
-    wl-clipboard
-    gh
+    waybar
+    neovim
+    celluloid
+    floorp
+    git
+    kitty
+    wofi
+
+    # -------------------- #
+
+    (callPackage /etc/nixos/sddm-themes/TerminalStyleLogin.nix {}).sddm-sugar-dark
   ];
 
   services.udisks2.enable = true;

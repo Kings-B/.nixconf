@@ -8,7 +8,9 @@
 
   # # Initializes home manager
   home-manager.users.poppy = { pkgs, ... }: {
-    home.packages = [  ];
+    home.packages = with pkgs; [ 
+      
+    ];
 
     # Enables git as well as sets credentials
     programs.git = {
@@ -20,10 +22,11 @@
       	credential.helper = "store";
       };
     };
-    
+
+
+
     home.stateVersion = "24.11";
   };
 
   home-manager.useGlobalPkgs = true;
-
 }
