@@ -76,6 +76,8 @@
     ];
   };
 
+  programs.steam.enable = true;
+
   # # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
@@ -107,7 +109,7 @@
 
   # # List packages installed in system profile: nix search wget
   environment.systemPackages = with pkgs; [
-    htop
+    btop
     gnome-keyring
     libsecret
     libsForQt5.qt5ct
@@ -121,32 +123,34 @@
     gcc
     gnumake
     libsForQt5.qt5.qtgraphicaleffects
+    corefonts
+    google-fonts
 
     # -------------------- #
 
     you-get
-    steam
     neofetch
-    flameshot
     pavucontrol
     gh
     wl-clipboard
     ripgrep
-    nodejs
     unzip
     wget
     fd
     obsidian
     obs-studio
-    davinci-resolve
     discord
     waybar
     neovim
     celluloid
     floorp
     git
-    kitty
+    github-desktop
+    ghostty
+    tealdeer
     wofi
+
+    # -------------------- #
 
     # -------------------- #
 
