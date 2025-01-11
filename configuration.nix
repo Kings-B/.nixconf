@@ -7,9 +7,18 @@
       ./cc/virtual-machine.nix
       ./cc/aliases.nix
       ./cc/home-manager.nix
+      ./cc/scripts.nix
     ];
 
-  # # GRUB Bootloader.
+  # # Nix Flakes
+  nix = {
+    package = pkgs.nixVersions.stable;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+
+  # # GRUB bootloader.
   boot = {
     tmp.cleanOnBoot = true;
     loader = {
@@ -64,20 +73,6 @@
      open = false; # Propietary Nvidia Drivers (For open source drivers change to true)
   };  
 
-  # # Setting up steam graphics
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      vulkan-loader
-    ];
-    extraPackages32 = with pkgs.pkgsi686Linux; [
-      vulkan-loader
-      mesa
-    ];
-  };
-
-  programs.steam.enable = true;
-
   # # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
@@ -85,14 +80,12 @@
   };
 
   # # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     jack.enable = true;
-    pulse.enable = false;
     wireplumber.enable = true;
   };
 
@@ -104,14 +97,24 @@
     packages = with pkgs; [];
   };
 
-    # # Allow unfree packages
+  # # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # # Nix Flakes (Double Check)
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # # Permitted Insecure Packages that get blocked when using nixos-rebuild
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-27.3.11"
+  ];
 
   # # List packages installed in system profile: nix search wget
   environment.systemPackages = with pkgs; [
     btop
     gnome-keyring
     libsecret
+    polkit
+    hyprpolkitagent
     libsForQt5.qt5ct
     xfce.thunar
     udisks2
@@ -125,6 +128,8 @@
     libsForQt5.qt5.qtgraphicaleffects
     corefonts
     google-fonts
+    nerdfonts
+    hyprpaper
 
     # -------------------- #
 
@@ -135,22 +140,23 @@
     wl-clipboard
     ripgrep
     unzip
-    wget
     fd
-    obsidian
+    logseq  super-productivity
     obs-studio
     discord
-    waybar
-    neovim
+    neovim  
+    luajitPackages.lua-lsp
     celluloid
-    floorp
     git
     github-desktop
     ghostty
     tealdeer
     wofi
+    imwheel
 
     # -------------------- #
+
+    (builtins.getFlake "github:youwen5/zen-browser-flake").packages.${builtins.currentSystem}.default
 
     # -------------------- #
 
@@ -171,6 +177,20 @@
   # # Enable gnome keyring servie. This is required to be able to sign into github desktop and probably other services.
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
+
+  # # Setting up steam graphics
+  #  hardware.graphics = {
+  #    enable = true;
+  #  extraPackages = with pkgs; [
+  #    vulkan-loader
+  #  ];
+  #  extraPackages32 = with pkgs.pkgsi686Linux; [
+  #    vulkan-loader
+  #    mesa
+  #  ];
+  #};
+  #
+  #programs.steam.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
