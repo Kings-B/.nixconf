@@ -4,10 +4,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./cc/virtual-machine.nix
-      ./cc/aliases.nix
-      ./cc/home-manager.nix
-      ./cc/scripts.nix
+      ./modules/virtual-machine.nix
+      ./modules/aliases.nix
     ];
 
   # # Nix Flakes
@@ -93,15 +91,12 @@
   users.users.poppy = {
     isNormalUser = true;
     description = "Poppy Field";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm"];
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm"];
     packages = with pkgs; [];
   };
 
   # # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # # Nix Flakes (Double Check)
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # # Permitted Insecure Packages that get blocked when using nixos-rebuild
   nixpkgs.config.permittedInsecurePackages = [
@@ -130,6 +125,7 @@
     google-fonts
     nerdfonts
     hyprpaper
+    direnv
 
     # -------------------- #
 
@@ -140,19 +136,31 @@
     wl-clipboard
     ripgrep
     unzip
+    wget
+    gnutar
+    gzip
     fd
     logseq  super-productivity
-    obs-studio
     discord
-    neovim  
-    luajitPackages.lua-lsp
+    neovim
+    lua-language-server
     celluloid
-    git
     github-desktop
     ghostty
     tealdeer
     wofi
+    anki
+    #raycast # Darwing as of now
     imwheel
+    zoom-us
+    obs-studio
+    #obs-studio-plugins.obs-webkitgtk
+    obs-studio-plugins.obs-websocket
+    obs-studio-plugins.obs-multi-rtmp
+    obs-studio-plugins.input-overlay
+    obs-studio-plugins.obs-vaapi
+    ffmpeg-full
+
 
     # -------------------- #
 
@@ -160,7 +168,7 @@
 
     # -------------------- #
 
-    (callPackage /etc/nixos/sddm-themes/TerminalStyleLogin.nix {}).sddm-sugar-dark
+    (callPackage /etc/nixos/sddm-themes/sugar-dark.nix {}).sddm-sugar-dark
   ];
 
   services.udisks2.enable = true;
@@ -179,8 +187,8 @@
   security.pam.services.sddm.enableGnomeKeyring = true;
 
   # # Setting up steam graphics
-  #  hardware.graphics = {
-  #    enable = true;
+  #hardware.graphics = {
+  #  enable = true;
   #  extraPackages = with pkgs; [
   #    vulkan-loader
   #  ];
